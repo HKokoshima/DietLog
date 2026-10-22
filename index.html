@@ -1,22 +1,36 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DietLog v5</title><script src="https://cdn.jsdelivr.net/npm/chart.js"></script><style>body{font-family:sans-serif;max-width:900px;margin:auto;padding:12px 12px 80px;background:#f5f5f5}.card{background:#fff;border-radius:16px;padding:12px;margin:10px 0;box-shadow:0 1px 3px rgba(0,0,0,.08)}.row{display:grid;grid-template-columns:1fr 90px 44px;gap:6px;margin:4px 0}input,button{padding:12px;box-sizing:border-box}button{border:none;border-radius:10px}.mealbtn,.toolbar button{width:100%}canvas{margin:12px 0}.savebar{position:fixed;left:0;right:0;bottom:0;background:#fff;padding:10px;border-top:1px solid #ddd}.savebar button{width:min(900px,95%);display:block;margin:auto;background:#2563eb;color:#fff;font-size:16px}.toolbar{display:flex;gap:8px;flex-wrap:wrap}.toolbar button{flex:1}.total{font-weight:bold;color:#2563eb}
 
-  <title>DietLog v5</title>
+h1{
+  font-size:1.5rem;
+  margin:0 0 12px 0;
+}
 
-  <link rel="manifest" href="manifest.json">
+h2{
+  font-size:1.05rem;
+  margin:8px 0;
+}
 
-  <link rel="icon" href="icon.png">
-  <link rel="apple-touch-icon" href="icon.png">
+.toolbar button{
+  font-size:0.95rem;
+  font-weight:600;
+}
 
-  <meta name="theme-color" content="#0a1f44">
-    
-    <script src="https://cdn.jsdelivr.net/npm/chart.js">
-      
-    </script><style>
-      body{font-family:sans-serif;max-width:900px;margin:auto;padding:12px 12px 80px;background:#f5f5f5}.card{background:#fff;border-radius:16px;padding:12px;margin:10px 0;box-shadow:0 1px 3px rgba(0,0,0,.08)}.row{display:grid;grid-template-columns:1fr 90px 44px;gap:6px;margin:4px 0}input,button{padding:12px;box-sizing:border-box}button{border:none;border-radius:10px}.mealbtn,.toolbar button{width:100%}canvas{margin:12px 0}.savebar{position:fixed;left:0;right:0;bottom:0;background:#fff;padding:10px;border-top:1px solid #ddd}.savebar button{width:min(900px,95%);display:block;margin:auto;background:#2563eb;color:#fff;font-size:16px}.toolbar{display:flex;gap:8px;flex-wrap:wrap}.toolbar button{flex:1}.total{font-weight:bold;color:#2563eb}</style></head><body><h1>ダイエット記録</h1><div class=card><div class='toolbar'><button onclick='openSettings()'>⚙目標設定</button><button onclick='exportCSV()'>📤CSV</button></div><input id=date type=date onchange='loadDay()'></div><div class=card><h2>朝食</h2><div id=breakfast></div><button class=mealbtn onclick="addFood('breakfast')">+追加</button><div class=total>合計:<span id=breakfastTotal>0</span>kcal</div><h2>昼食</h2><div id=lunch></div><button class=mealbtn onclick="addFood('lunch')">+追加</button><div class=total>合計:<span id=lunchTotal>0</span>kcal</div><h2>夕食</h2><div id=dinner></div><button class=mealbtn onclick="addFood('dinner')">+追加</button><div class=total>合計:<span id=dinnerTotal>0</span>kcal</div><h2>おやつ</h2><div id=snack></div><button class=mealbtn onclick="addFood('snack')">+追加</button><div class=total>合計:<span id=snackTotal>0</span>kcal</div></div><div class=card><h2>摂取総計:<span id=foodTotal>0</span>kcal</h2></div><div class=card><h2>運動</h2><div id=exercise></div><button onclick='addExercise()'>+運動追加</button><div class=total>消費総計:<span id=exerciseTotal>0</span>kcal</div></div><div class=card><h2>体重</h2><input id=weight type=number step=0.1></div><div class=card><h2>グラフ</h2><canvas id=calChart></canvas><canvas id=burnChart></canvas><canvas id=weightChart></canvas></div><dialog id=settings><h2>目標設定</h2><input id=goalCal type=number placeholder='目標摂取カロリー'><input id=goalBurn type=number placeholder='目標消費カロリー'><input id=goalWeight type=number step=0.1 placeholder='目標体重'><button onclick='saveGoals()'>保存</button><button onclick='settings.close()'>閉じる</button></dialog><div class='savebar'><button onclick='saveDay()'>保存</button></div><script>
+input{
+  font-size:0.95rem;
+}
+
+.total{
+  font-size:0.95rem;
+  font-weight:600;
+}
+</style>
+
+</head><body><h1>🐈 Healthy Life Log</h1>
+
+<div class=card>
+<div class='toolbar'>
+<button onclick='openSettings()'>⚙Goals</button><button onclick='exportCSV()'>📤CSV</button></div>
+<input id=date type=date onchange='loadDay()'></div><div class=card><h2>Breakfast</h2><div id=breakfast></div><button class=mealbtn onclick="addFood('breakfast')">+Add</button><div class=total>Total:<span id=breakfastTotal>0</span>kcal</div><h2>Lunch</h2><div id=lunch></div><button class=mealbtn onclick="addFood('lunch')">+Add</button><div class=total>Total:<span id=lunchTotal>0</span>kcal</div><h2>Dinner</h2><div id=dinner></div><button class=mealbtn onclick="addFood('dinner')">+Add</button><div class=total>Total:<span id=dinnerTotal>0</span>kcal</div><h2>Treats</h2><div id=snack></div><button class=mealbtn onclick="addFood('snack')">+Add</button><div class=total>Total:<span id=snackTotal>0</span>kcal</div></div><div class=card><h2>Total intake:<span id=foodTotal>0</span>kcal</h2></div><div class=card><h2>Exercise</h2><div id=exercise></div><button onclick='addExercise()'>+Add</button><div class=total>Total Burn:<span id=exerciseTotal>0</span>kcal</div></div><div class=card><h2>Body weight</h2><input id=weight type=number step=0.1></div><div class=card><h2>Chart</h2><canvas id=calChart></canvas><canvas id=burnChart></canvas><canvas id=weightChart></canvas></div><dialog id=settings><h2>Goal</h2><input id=goalCal type=number placeholder='Calorie Goal'><input id=goalBurn type=number placeholder='Burn Goal'><input id=goalWeight type=number step=0.1 placeholder='Target Weight'><button onclick='saveGoals()'>Save</button><button onclick='settings.close()'>Close</button></dialog><div class='savebar'><button onclick='saveDay()'>Save</button></div><script>
 date.value=new Date().toISOString().substring(0,10);function rowHtml(n,c){return `<div class=row><input value='${n||''}'><input type=number value='${c||''}'><button onclick='this.parentNode.remove();calc()'>×</button></div>`}function addFood(s,o){let d=document.createElement('div');d.innerHTML=rowHtml(o?.name,o?.cal);d=d.firstChild;d.oninput=calc;document.getElementById(s).appendChild(d);calc()}function addExercise(o){let d=document.createElement('div');d.innerHTML=rowHtml(o?.name,o?.cal);d=d.firstChild;d.oninput=calc;exercise.appendChild(d);calc()}function sum(id){let t=0;document.querySelectorAll('#'+id+' .row').forEach(r=>t+=Number(r.children[1].value||0));return t}function calc(){['breakfast','lunch','dinner','snack'].forEach(s=>document.getElementById(s+'Total').textContent=sum(s));foodTotal.textContent=sum('breakfast')+sum('lunch')+sum('dinner')+sum('snack');exerciseTotal.textContent=sum('exercise')}function saveDay(){let db=JSON.parse(localStorage.getItem('dietlog')||'{}');let rec={weight:weight.value,foods:{},exercise:[]};['breakfast','lunch','dinner','snack'].forEach(s=>rec.foods[s]=[...document.querySelectorAll('#'+s+' .row')].map(r=>({name:r.children[0].value,cal:Number(r.children[1].value||0)})));rec.exercise=[...document.querySelectorAll('#exercise .row')].map(r=>({name:r.children[0].value,cal:Number(r.children[1].value||0)}));db[date.value]=rec;localStorage.setItem('dietlog',JSON.stringify(db));renderGraphs();alert('保存しました')}function loadDay(){let db=JSON.parse(localStorage.getItem('dietlog')||'{}');let rec=db[date.value];['breakfast','lunch','dinner','snack'].forEach(s=>document.getElementById(s).innerHTML='');exercise.innerHTML='';weight.value='';if(rec){['breakfast','lunch','dinner','snack'].forEach(s=>{(rec.foods[s]||[]).forEach(v=>addFood(s,v));if((rec.foods[s]||[]).length==0)addFood(s)});(rec.exercise||[]).forEach(addExercise);if((rec.exercise||[]).length==0)addExercise();weight.value=rec.weight||'';}else{['breakfast','lunch','dinner','snack'].forEach(s=>addFood(s));addExercise()}calc()}function openSettings(){let g=JSON.parse(localStorage.getItem('dietgoal')||'{}');goalCal.value=g.cal||'';goalBurn.value=g.burn||'';goalWeight.value=g.weight||'';settings.showModal()}function saveGoals(){localStorage.setItem('dietgoal',JSON.stringify({cal:goalCal.value,burn:goalBurn.value,weight:goalWeight.value}));settings.close();renderGraphs()}function exportCSV(){let db=JSON.parse(localStorage.getItem('dietlog')||'{}');let rows=['Date,Category,Item,Calories,Weight'];for(const d in db){let r=db[d];for(const cat in r.foods){(r.foods[cat]||[]).forEach(f=>rows.push(`${d},${cat},${f.name},${f.cal},${r.weight}`))}(r.exercise||[]).forEach(e=>rows.push(`${d},Exercise,${e.name},${e.cal},${r.weight}`))}
 
 const bom='\uFEFF';
@@ -25,5 +39,5 @@ let blob=new Blob(
   {type:'text/csv;charset=utf-8;'}
 );
 
-let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='DietLog.csv';a.click()}let charts={};function draw(id,label,data,goal,labels){if(charts[id])charts[id].destroy();charts[id]=new Chart(document.getElementById(id),{type:'line',data:{labels:labels,datasets:[{label:label,data:data,borderColor:'blue'},{label:'目標',data:labels.map(()=>goal),borderColor:'red',borderDash:[5,5]}]}})}function renderGraphs(){let db=JSON.parse(localStorage.getItem('dietlog')||'{}');let g=JSON.parse(localStorage.getItem('dietgoal')||'{}');let dates=Object.keys(db).sort();let cal=dates.map(d=>Object.values(db[d].foods).flat().reduce((a,b)=>a+Number(b.cal||0),0));let burn=dates.map(d=>(db[d].exercise||[]).reduce((a,b)=>a+Number(b.cal||0),0));let wt=dates.map(d=>Number(db[d].weight||0));draw('calChart','摂取カロリー',cal,g.cal||0,dates);draw('burnChart','消費カロリー',burn,g.burn||0,dates);draw('weightChart','体重',wt,g.weight||0,dates)}loadDay();renderGraphs();
+let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='DietLog.csv';a.click()}let charts={};function draw(id,label,data,goal,labels){if(charts[id])charts[id].destroy();charts[id]=new Chart(document.getElementById(id),{type:'line',data:{labels:labels,datasets:[{label:label,data:data,borderColor:'blue'},{label:'Goal',data:labels.map(()=>goal),borderColor:'red',borderDash:[5,5]}]}})}function renderGraphs(){let db=JSON.parse(localStorage.getItem('dietlog')||'{}');let g=JSON.parse(localStorage.getItem('dietgoal')||'{}');let dates=Object.keys(db).sort();let cal=dates.map(d=>Object.values(db[d].foods).flat().reduce((a,b)=>a+Number(b.cal||0),0));let burn=dates.map(d=>(db[d].exercise||[]).reduce((a,b)=>a+Number(b.cal||0),0));let wt=dates.map(d=>Number(db[d].weight||0));draw('calChart','Calorie Intake',cal,g.cal||0,dates);draw('burnChart','Calorie Burn',burn,g.burn||0,dates);draw('weightChart','Body weight',wt,g.weight||0,dates)}loadDay();renderGraphs();
 </script></body></html>
